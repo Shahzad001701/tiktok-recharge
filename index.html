@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TikTok Recharge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container" role="main">
+    <header class="top">
+      <div class="logo">TikTok Recharge</div>
+      <div class="sub">Recharge your account — Interface only</div>
+    </header>
+
+    <section class="card">
+      <form id="rechargeForm" onsubmit="return false;" autocomplete="off" novalidate>
+        <label for="operator">Operator</label>
+        <select id="operator" aria-label="Operator">
+          <option value="jazz">JazzCash</option>
+          <option value="easypaisa">Easypaisa</option>
+          <option value="ufone">Ufone</option>
+          <option value="telenor">Telenor</option>
+        </select>
+
+        <label for="msisdn">Mobile Number</label>
+        <input id="msisdn" type="tel" inputmode="numeric" placeholder="03XXXXXXXXX" />
+
+        <div class="row">
+          <div class="col">
+            <label for="amount">Amount (PKR)</label>
+            <input id="amount" inputmode="numeric" placeholder="مثال: 200" />
+          </div>
+          <div class="col">
+            <label for="preset">Quick</label>
+            <select id="preset">
+              <option value="">Select</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="payBtn" class="btn primary" type="button">Proceed</button>
+          <button id="resetBtn" class="btn secondary" type="button">Reset</button>
+        </div>
+
+        <div id="result" class="result" aria-live="polite">تیار</div>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <small>یہ صفحہ صرف UI مثال کے طور پر ہے — کوئی حقیقی لین دین نہیں ہوتا۔</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
