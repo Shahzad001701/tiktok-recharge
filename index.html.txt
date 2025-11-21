@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Coins Recharge (Clone)</title>
+    <style>
+        /* CSS Variables */
+        :root {
+            --tiktok-red: #fe2c55;
+            --background-color: #f8f8f8;
+            --border-color: #e5e5e5;
+            --text-color-dark: #161823;
+            --text-color-medium: #6a6b72;
+        }
+
+        body {
+            font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .phone-screen {
+            width: 375px;
+            height: 750px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            border: 8px solid black; 
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .header h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-color-dark);
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .back-icon {
+            font-size: 24px;
+            color: var(--text-color-dark);
+            position: absolute;
+            left: 15px;
+        }
+
+        /* Recharge Content */
+        .recharge-content {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100% - 130px);
+        }
+
+        /* Search Bar */
+        .search-bar-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color-medium);
+            font-size: 18px;
+        }
+
+        .username-input {
+            width: calc(100% - 40px);
+            padding: 10px 10px 10px 40px;
+            border: none;
+            background-color: var(--background-color);
+            border-radius: 20px;
+            font-size: 16px;
+            color: var(--text-color-dark);
+            box-sizing: border-box;
+            /* Placeholder color similar to TikTok */
+            color: var(--text-color-medium); 
+        }
+
+        .username-input::placeholder {
+            color: var(--text-color-medium);
+        }
+        
+        /* Notice Bar */
+        .recharge-notice {
+            font-size: 13px;
+            color: var(--tiktok-red);
+            background-color: #fff0f3;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+
+        /* Coin Packages */
+        .coin-packages {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .package-item {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+            background-color: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .package-item.selected {
+            border: 2px solid var(--tiktok-red);
+            background-color: #fff8f8;
+        }
+
+        .coins {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-color-dark);
+            margin-bottom: 2px;
+        }
+        
+        .coins::before {
+             content: '🟡';
+             margin-right: 5px;
+             font-size: 18px;
+        }
+
+        .price {
+            font-size: 14px;
+            color: var(--text-color-medium);
+        }
+
+        /* Recharge Button (Footer) */
+        .recharge-button-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            background: white;
+            border-top: 1px solid var(--border-color);
+        }
+
+        #rechargeButton {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--tiktok-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Payment Popup (Modal) */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 80%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .success-icon {
+            color: #4CAF50;
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .processing-text {
+            font-size: 18px;
+            color: var(--text-color-dark);
+            margin-bottom: 10px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--tiktok-red);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-screen">
+    <div class="header">
+        <span class="back-icon">&#8249;</span>
+        <h3>Get Coins</h3>
+        <span style="font-size: 24px; color: var(--text-color-dark); position: absolute; right: 15px;">&#8942;</span>
+    </div>
+
+    <div class="recharge-content">
+        <div class="search-bar-container">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" class="username-input" placeholder="Search Username..." value="" /> 
+        </div>
+
+        <div class="recharge-notice">
+            ⚠️ Save around 25% with a lower third-party service fee.
+        </div>
+
+        <div class="coin-packages">
+            <div class="package-item selected" data-coins="17500" data-price="224.99">
+                <div class="coins">17,500</div>
+                <div class="price">USD 224.99</div>
+            </div>
+            <div class="package-item" data-coins="7000" data-price="89.99">
+                <div class="coins">7,000</div>
+                <div class="price">USD 89.99</div>
+            </div>
+            <div class="package-item" data-coins="1400" data-price="17.99">
+                <div class="coins">1,400</div>
+                <div class="price">USD 17.99</div>
+            </div>
+            <div class="package-item" data-coins="350" data-price="4.49">
+                <div class="coins">350</div>
+                <div class="price">USD 4.49</div>
+            </div>
+            <div class="package-item" data-coins="70" data-price="0.89">
+                <div class="coins">70</div>
+                <div class="price">USD 0.89</div>
+            </div>
+            <div class="package-item" data-coins="custom" data-price="custom">
+                <div class="coins">Custom</div>
+                <div class="price">Large amount supported</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recharge-button-container">
+        <div id="totalPriceDisplay" style="font-size: 14px; color: var(--text-color-medium); margin-bottom: 5px;">Total: $224.99</div>
+        <button id="rechargeButton">Recharge</button>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div id="processingDiv">
+                <div class="loading-spinner"></div>
+                <p class="processing-text">Processing your payment...</p>
+                <p style="font-size: 12px; color: var(--text-color-medium);">This could take a few seconds</p>
+            </div>
+            <div id="successDiv" style="display: none;">
+                <div class="success-icon">&#10003;</div>
+                <p class="processing-text" style="font-weight: 700;">Payment Completed</p>
+                <p style="font-size: 14px; color: var(--text-color-medium); margin-bottom: 20px;">
+                    You successfully recharged <span id="finalCoins"></span> Coins.
+                </p>
+                <button onclick="document.getElementById('paymentModal').style.display='none';" style="padding: 10px 20px; background-color: var(--tiktok-red); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    Go back
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // JavaScript Logic
+    const rechargeButton = document.getElementById('rechargeButton');
+    const paymentModal = document.getElementById('paymentModal');
+    const processingDiv = document.getElementById('processingDiv');
+    const successDiv = document.getElementById('successDiv');
+    const finalCoinsDisplay = document.getElementById('finalCoins');
+    const packages = document.querySelectorAll('.package-item');
+    const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    
+    // Set default selected coins based on the largest package (17,500)
+    let selectedCoins = 17500; 
+    let selectedPrice = "224.99";
+
+    // Handle package selection
+    packages.forEach(pkg => {
+        pkg.addEventListener('click', () => {
+            packages.forEach(p => p.classList.remove('selected'));
+            pkg.classList.add('selected');
+            selectedCoins = pkg.getAttribute('data-coins');
+            selectedPrice = pkg.getAttribute('data-price');
+            
+            if (selectedCoins === 'custom') {
+                // Faking a large custom amount and price for the demo
+                selectedCoins = 50000;
+                selectedPrice = '528.60';
+                totalPriceDisplay.textContent = 'Total: $' + selectedPrice;
+            } else {
+                 totalPriceDisplay.textContent = 'Total: $' + selectedPrice;
+            }
+        });
+    });
+
+    // Handle Recharge Button Click
+    rechargeButton.addEventListener('click', () => {
+        // Show Payment Processing Modal
+        paymentModal.style.display = 'flex';
+        processingDiv.style.display = 'block';
+        successDiv.style.display = 'none';
+        
+        // Format coins with comma (e.g., 17,500)
+        finalCoinsDisplay.textContent = selectedCoins.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+
+        // Simulate Payment Processing Time (3 seconds)
+        setTimeout(() => {
+            // Show Success Message
+            processingDiv.style.display = 'none';
+            successDiv.style.display = 'block';
+        }, 3000); 
+    });
+
+</script>
+
+</body>
+</html>
